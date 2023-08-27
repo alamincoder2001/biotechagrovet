@@ -7,14 +7,14 @@ $query_builder = TRUE;
 $db['default'] = array(
 	'dsn'	=> '',
 	'hostname' => 'localhost',
-	
-'username' => 'bigektuw_a_dmin1',
-  	'password' => 'bPcAG&$#%z0Y',
+
+	'username' => 'root',
+	'password' => '',
 	'database' => 'bigektuw_biotechagrovet',
 
-// 	'username' => 'root',
-// 	'password' => '',
-// 	'database' => 'bio_tech',
+	// 'username' => 'bigektuw_a_dmin1',
+	// 'password' => 'bPcAG&$#%z0Y',
+	// 'database' => 'bigektuw_biotechagrovet',
 
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
