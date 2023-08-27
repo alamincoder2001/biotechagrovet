@@ -8,13 +8,13 @@ $db['default'] = array(
 	'dsn'	=> '',
 	'hostname' => 'localhost',
 	
-	// 'username' => 'bigektuw',
-	// 'password' => 'sChzA2HnVel0',
-	// 'database' => 'bigektuw_biotechagrovet',
-
-	'username' => 'root',
-	'password' => '',
+'username' => 'bigektuw_a_dmin1',
+  	'password' => 'bPcAG&$#%z0Y',
 	'database' => 'bigektuw_biotechagrovet',
+
+// 	'username' => 'root',
+// 	'password' => '',
+// 	'database' => 'bio_tech',
 
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
