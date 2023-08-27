@@ -11,7 +11,7 @@ const salesInvoice = Vue.component("sales-invoice", {
                 <div class="row">
                     <div class="col-xs-12 text-center">
                         <div _h098asdh>
-                            Sales Invoice
+                            Sales Invoice ({{parseFloat(sales.SaleMaster_DueAmount) > 0 ? 'Credit' : 'Cash'}})
                         </div>
                     </div>
                 </div>
@@ -457,12 +457,17 @@ const salesInvoice = Vue.component("sales-invoice", {
                                 </tfoot>
                             </table>
                             <div class="row" style="border-bottom:1px solid #ccc;margin-bottom:5px;padding-bottom:6px;">
-                                <div class="col-xs-6">
-                                    <span style="text-decoration:overline;">Received by</span><br><br>
-                                    ** THANK YOU FOR YOUR BUSINESS **
+                                <div class="col-xs-4">
+                                    <span style="text-decoration:overline;">Received by</span>
                                 </div>
-                                <div class="col-xs-6 text-right">
+                                <div class="col-xs-4 text-center">
+                                    <span style="text-decoration:overline;">Territory Officer</span>
+                                </div>
+                                <div class="col-xs-4 text-right">
                                     <span style="text-decoration:overline;">Authorized by</span>
+                                </div>
+                                <div class="col-xs-12" style="margin-top:15px;">
+                                    ** THANK YOU FOR YOUR BUSINESS **
                                 </div>
                             </div>
                             <div style="position:fixed;left:0;bottom:15px;width:100%;">
