@@ -176,8 +176,8 @@ class Sales extends CI_Controller
                     and branch_id = ?
                 ", [$cartProduct->quantity, $cartProduct->productId, $this->session->userdata('BRANCHid')]);
             }
-            $currentDue = $data->sales->previousDue + ($data->sales->total - $data->sales->paid);
             //Send sms
+            $currentDue = $data->sales->previousDue + ($data->sales->total - $data->sales->paid);
             $customerInfo = $this->db->query("select * from tbl_customer where Customer_SlNo = ?", $customerId)->row();
             $sendToName = $customerInfo->owner_name != '' ? $customerInfo->owner_name : $customerInfo->Customer_Name;
             $currency = $this->session->userdata('Currency_Name');
