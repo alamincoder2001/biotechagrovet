@@ -154,7 +154,7 @@ class Customer extends CI_Controller
         $res = ['success' => false, 'message' => ''];
         try {
             $paymentObj = json_decode($this->input->raw_input_stream);
-
+           
             $payment = (array)$paymentObj;
             $payment['CPayment_invoice'] = $this->mt->generateCustomerPaymentCode();
             $payment['CPayment_status'] = 'a';
@@ -190,6 +190,8 @@ class Customer extends CI_Controller
         $res = ['success' => false, 'message' => ''];
         try {
             $paymentObj = json_decode($this->input->raw_input_stream);
+            // echo json_encode($paymentObj);
+            // return;
             $paymentId = $paymentObj->CPayment_id;
 
             $payment = (array)$paymentObj;
@@ -589,6 +591,7 @@ class Customer extends CI_Controller
                 concat('Sales ', sm.SaleMaster_InvoiceNo) as description,
                 sm.SaleMaster_TotalSaleAmount as bill,
                 sm.SaleMaster_PaidAmount as paid,
+                0.00 as commission,
                 sm.SaleMaster_DueAmount as due,
                 0.00 as returned,
                 0.00 as paid_out,
@@ -611,6 +614,7 @@ class Customer extends CI_Controller
                 ) as description,
                 0.00 as bill,
                 cp.CPayment_amount as paid,
+                cp.CPayment_commission as commission,
                 0.00 as due,
                 0.00 as returned,
                 0.00 as paid_out,
@@ -634,6 +638,7 @@ class Customer extends CI_Controller
                 ) as description,
                 0.00 as bill,
                 0.00 as paid,
+                cp.CPayment_commission as commission,
                 0.00 as due,
                 0.00 as returned,
                 cp.CPayment_amount as paid_out,
@@ -652,6 +657,7 @@ class Customer extends CI_Controller
                 'Sales return' as description,
                 0.00 as bill,
                 0.00 as paid,
+                0.00 as commission,
                 0.00 as due,
                 sr.SaleReturn_ReturnAmount as returned,
                 0.00 as paid_out,
@@ -668,6 +674,7 @@ class Customer extends CI_Controller
                 concat('Material Sales- ', ms.invoice_no) as description,
                 ms.sub_total as bill,
                 ms.paid as paid,
+                0.00 as commission,
                 ms.due as due,
                 0.00 as returned,
                 0.00 as paid_out,
@@ -739,7 +746,7 @@ class Customer extends CI_Controller
                 from tbl_salesmaster 
                 where SalseCustomer_IDNo = c.Customer_SlNo
                 and SaleMaster_SaleDate < '$startdate') as salesAmount,
-            (select ifnull(sum(CPayment_amount), 0.00) 
+            (select ifnull(sum(CPayment_amount), 0.00 + ifnull(sum(CPayment_commission), 0.00) 
                 from tbl_customer_payment 
                 where CPayment_customerID = c.Customer_SlNo
                 and CPayment_date < '$startdate') as paidAmount,

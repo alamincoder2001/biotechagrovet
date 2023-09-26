@@ -153,6 +153,13 @@
 							</div>
 						</div>
 						<div class="form-group">
+							<label class="col-md-4 control-label">Commission</label>
+							<label class="col-md-1">:</label>
+							<div class="col-md-7">
+								<input type="number" class="form-control" v-model="payment.CPayment_commission">
+							</div>
+						</div>
+						<div class="form-group">
 							<div class="col-md-7 col-md-offset-5">
 								<input type="submit" class="btn btn-success btn-sm" value="Save">
 								<input type="button" class="btn btn-danger btn-sm" value="Cancel" @click="resetForm">
@@ -185,6 +192,7 @@
 							<td>{{ row.transaction_type }}</td>
 							<td>{{ row.payment_by }}</td>
 							<td>{{ row.CPayment_amount }}</td>
+							<td>{{ row.CPayment_commission }}</td>
 							<td>{{ row.CPayment_notes }}</td>
 							<td>{{ row.CPayment_Addby }}</td>
 							<td>
@@ -229,6 +237,7 @@
 					account_id: null,
 					CPayment_date: moment().format('YYYY-MM-DD'),
 					CPayment_amount: '',
+					CPayment_commission: '',
 					CPayment_notes: '',
 					CPayment_previous_due: 0,
 					unit_area_id: '',
@@ -297,6 +306,11 @@
 					{
 						label: 'Amount',
 						field: 'CPayment_amount',
+						align: 'center'
+					},
+					{
+						label: 'Commission',
+						field: 'CPayment_commission',
 						align: 'center'
 					},
 					{
@@ -478,6 +492,7 @@
 				this.payment.CPayment_id = 0;
 				this.payment.CPayment_customerID = '';
 				this.payment.CPayment_amount = '';
+				this.payment.CPayment_commission = '';
 				this.payment.CPayment_notes = '';
 
 				this.selectedCustomer = {

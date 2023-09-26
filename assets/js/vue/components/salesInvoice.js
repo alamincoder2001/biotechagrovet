@@ -182,6 +182,9 @@ const salesInvoice = Vue.component("sales-invoice", {
     setStyle() {
       this.style = document.createElement("style");
       this.style.innerHTML = `
+                .color-green {
+                   color:#7CFC00;
+                },
                 div[_h098asdh]{
                     /*background-color:#e0e0e0;*/
                     font-weight: bold;
@@ -212,6 +215,13 @@ const salesInvoice = Vue.component("sales-invoice", {
                 }
                 table[_t92sadbc2] td{
                     padding: 2px;
+                }
+                body {
+                    background-image: url(/uploads/company_profile_thum/logo_black.png) !important;
+                    background-color: rgb(255 255 255 / 50%) !important;
+                    background-repeat: no-repeat !important;
+                    background-position: center !important;
+                    background-size: 500px 500px !important;
                 }
             `;
       document.head.appendChild(this.style);
@@ -328,9 +338,23 @@ const salesInvoice = Vue.component("sales-invoice", {
                                 body, table{
                                     font-size:11px;
                                 }
+                                @media print {
+                                    body {
+                                        background-image: url(/uploads/company_profile_thum/logo_black.png) !important;
+                                        background-color: rgb(255 255 255 / 50%) !important;
+                                        background-repeat: no-repeat !important;
+                                        background-position: center !important;
+                                        background-size: 500px 500px !important;
+                                    }
+                                }
                             </style>
                         </head>
                         <body>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <h2 class="color-green" style="color:#7CFC00;text-align:center;font-style:italic;text-transform:uppercase">Biotech Agrovet</h2>
+                                </div>
+                            </div>
                             <div style="text-align:center;">
                                 <img src="/uploads/company_profile_thum/${this.currentBranch.Company_Logo_org}" alt="Logo" style="height:80px;margin:0px;" /><br>
                                 <strong style="font-size:18px;">${this.currentBranch.Company_Name}</strong><br>
@@ -357,10 +381,22 @@ const salesInvoice = Vue.component("sales-invoice", {
                             body, table{
                                 font-size: 13px;
                             }
+                            @media print {
+                                body {
+                                    background-image: url(/uploads/company_profile_thum/logo_black.png) !important;
+                                    background-color: rgb(255 255 255 / 50%) !important;
+                                    background-repeat: no-repeat !important;
+                                    background-position: center !important;
+                                    background-size: 500px 500px !important;
+                                }
+                            }
                         </style>
                     </head>
                     <body>
                         <div class="row">
+                            <div class="col-xs-12">
+                                <h2 class="color-green" style="color:#7CFC00;text-align:center;font-style:italic;text-transform:uppercase">Biotech Agrovet</h2>
+                            </div>
                             <div class="col-xs-2"><img src="/uploads/company_profile_thum/${this.currentBranch.Company_Logo_org}" alt="Logo" style="height:80px;" /></div>
                             <div class="col-xs-10" style="padding-top:20px;">
                                 <strong style="font-size:18px;">${this.currentBranch.Company_Name}</strong><br>
@@ -394,6 +430,15 @@ const salesInvoice = Vue.component("sales-invoice", {
                             body, table{
                                 font-size: 13px;
                             }
+                            @media print {
+                                body {
+                                    background-image: url(/uploads/company_profile_thum/logo_black.png) !important;
+                                    background-color: rgb(255 255 255 / 50%) !important;
+                                    background-repeat: no-repeat !important;
+                                    background-position: center !important;
+                                    background-size: 500px 500px !important;
+                                }
+                            }
                         </style>
                     </head>
                     <body>
@@ -403,6 +448,9 @@ const salesInvoice = Vue.component("sales-invoice", {
                                     <tr>
                                         <td>
                                             <div class="row">
+                                                <div class="col-xs-12">
+                                                    <h2 class="color-green" style="color:#7CFC00;text-align:center;font-style:italic;text-transform:uppercase">Biotech Agrovet</h2>
+                                                </div>
                                                 <div class="col-xs-3" style="padding:0;padding-left:5px;">
                                                     <img src="/uploads/company_profile_thum/${this.currentBranch.Company_Logo_org}" alt="Logo" style="height:80px;width:100%;" />
                                                 </div>

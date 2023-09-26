@@ -176,8 +176,8 @@ class Sales extends CI_Controller
                     and branch_id = ?
                 ", [$cartProduct->quantity, $cartProduct->productId, $this->session->userdata('BRANCHid')]);
             }
-            //Send sms
             $currentDue = $data->sales->previousDue + ($data->sales->total - $data->sales->paid);
+            //Send sms
             $customerInfo = $this->db->query("select * from tbl_customer where Customer_SlNo = ?", $customerId)->row();
             $sendToName = $customerInfo->owner_name != '' ? $customerInfo->owner_name : $customerInfo->Customer_Name;
             $currency = $this->session->userdata('Currency_Name');
@@ -271,6 +271,15 @@ class Sales extends CI_Controller
             $clauses .= " and sm.employee_id = '$data->employeeId'";
         }
 
+        if (isset($data->unitAreaId) && $data->unitAreaId != '') {
+            $clauses .= " and sm.unit_area_id = '$data->unitAreaId'";
+        }
+
+        if (isset($data->territoryId) && $data->territoryId != '') {
+            $clauses .= " and sm.territory_id = '$data->territoryId'";
+        }
+
+
         $sales = $this->db->query("
             select 
                 sm.*,
@@ -280,6 +289,8 @@ class Sales extends CI_Controller
                 c.Customer_Address,
                 e.Employee_Name,
                 br.Brunch_name,
+                t.territory_name,
+                ua.unit_area_name,
                 (
                     select ifnull(count(*), 0) from tbl_saledetails sd 
                     where sd.SaleMaster_IDNo = 1
@@ -289,6 +300,8 @@ class Sales extends CI_Controller
             left join tbl_customer c on c.Customer_SlNo = sm.SalseCustomer_IDNo
             left join tbl_employee e on e.Employee_SlNo = sm.employee_id
             left join tbl_brunch br on br.brunch_id = sm.SaleMaster_branchid
+            left join tbl_territories t on t.territory_id = sm.territory_id
+            left join tbl_unit_area ua on ua.unit_area_id = sm.unit_area_id
             where sm.SaleMaster_branchid = '$branchId'
             and sm.Status = 'a'
             $clauses
@@ -337,6 +350,15 @@ class Sales extends CI_Controller
         if (isset($data->customerType) && $data->customerType != '') {
             $clauses .= " and c.Customer_Type = '$data->customerType'";
         }
+
+        if (isset($data->unitAreaId) && $data->unitAreaId != '') {
+            $clauses .= " and sm.unit_area_id = '$data->unitAreaId'";
+        }
+
+        if (isset($data->territoryId) && $data->territoryId != '') {
+            $clauses .= " and sm.territory_id = '$data->territoryId'";
+        }
+
 
         if (isset($data->salesId) && $data->salesId != 0 && $data->salesId != '') {
             $clauses .= " and SaleMaster_SlNo = '$data->salesId'";

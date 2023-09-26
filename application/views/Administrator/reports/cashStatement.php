@@ -154,7 +154,7 @@
 							<td>{{ payment.CPayment_invoice }}</td>
 							<td>{{ payment.CPayment_date }}</td>
 							<td>{{ payment.Customer_Name }}</td>
-							<td style="text-align:right;">{{ payment.CPayment_amount | decimal }}</td>
+							<td style="text-align:right;">{{ (+payment.CPayment_amount + +payment.CPayment_commission) | decimal }}</td>
 						</tr>
 					</tbody>
 					<tfoot>
@@ -517,7 +517,7 @@
 							<td>{{ payment.CPayment_invoice }}</td>
 							<td>{{ payment.CPayment_date }}</td>
 							<td>{{ payment.Customer_Name }}</td>
-							<td style="text-align:right;">{{ payment.CPayment_amount | decimal }}</td>
+							<td style="text-align:right;">{{ (+payment.CPayment_amount + +payment.CPayment_commission) | decimal }}</td>
 						</tr>
 					</tbody>
 					<tfoot>
@@ -793,12 +793,12 @@
 			},
 			totalReceivedFromCustomers() {
 				return this.receivedFromCustomers.reduce((prev, curr) => {
-					return prev + parseFloat(curr.CPayment_amount)
+					return prev + parseFloat(+curr.CPayment_amount + +curr.CPayment_commission)
 				}, 0).toFixed(2);
 			},
 			totalPaidToCustomers() {
 				return this.paidToCustomers.reduce((prev, curr) => {
-					return prev + parseFloat(curr.CPayment_amount)
+					return prev + parseFloat(+curr.CPayment_amount + +curr.CPayment_commission)
 				}, 0).toFixed(2);
 			},
 			totalReceivedFromSuppliers() {

@@ -88,6 +88,7 @@
 							<th style="text-align:center">Inv.Due</th>
 							<th style="text-align:center">Retruned</th>
 							<th style="text-align:center">Paid to customer</th>
+							<th style="text-align:center">Commission</th>
 							<th style="text-align:center">Balance</th>
 						</tr>
 					</thead>
@@ -95,7 +96,7 @@
 						<tr>
 							<td></td>
 							<td style="text-align:left;">Previous Balance</td>
-							<td colspan="5"></td>
+							<td colspan="6"></td>
 							<td style="text-align:right;">{{ parseFloat(previousBalance).toFixed(2) }}</td>
 						</tr>
 						<tr v-for="payment in payments">
@@ -106,6 +107,7 @@
 							<td style="text-align:right;">{{ parseFloat(payment.due).toFixed(2) }}</td>
 							<td style="text-align:right;">{{ parseFloat(payment.returned).toFixed(2) }}</td>
 							<td style="text-align:right;">{{ parseFloat(payment.paid_out).toFixed(2) }}</td>
+							<td style="text-align:right;">{{ parseFloat(payment.commission).toFixed(2) }}</td>
 							<td style="text-align:right;">{{ parseFloat(payment.balance).toFixed(2) }}</td>
 						</tr>
 					</tbody>
@@ -117,6 +119,7 @@
 							<td style="text-align: right;">{{ payments.reduce((p, c) => { return p + parseFloat(c.due) }, 0).toFixed(2) }}</td>
 							<td style="text-align: right;">{{ payments.reduce((p, c) => { return p + parseFloat(c.returned) }, 0).toFixed(2) }}</td>
 							<td style="text-align: right;">{{ payments.reduce((p, c) => { return p + parseFloat(c.paid_out) }, 0).toFixed(2) }}</td>
+							<td style="text-align: right;">{{ payments.reduce((p, c) => { return p + parseFloat(c.commission) }, 0).toFixed(2) }}</td>
 							<td style="text-align: right;">{{ payments[payments.length - 1].balance.toFixed(2) }}</td>
 						</tr>
 					</tfoot>

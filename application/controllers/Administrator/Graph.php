@@ -121,7 +121,7 @@
                     and sm.SaleMaster_SaleDate = '" . date('Y-m-d') . "'
                 ), 0) +
                 ifnull((
-                    select sum(ifnull(cp.CPayment_amount, 0)) 
+                    select ifnull(sum(cp.CPayment_amount), 0.00) + ifnull(sum(CPayment_amount), 0.00) 
                     from tbl_customer_payment cp
                     where cp.CPayment_status = 'a'
                     and cp.CPayment_TransactionType = 'CR'

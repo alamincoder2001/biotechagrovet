@@ -89,6 +89,7 @@
                             <th style="text-align:center">Payment by</th>
                             <th style="text-align:center">Description</th>
                             <th style="text-align:center">Amount</th>
+                            <th style="text-align:center">Commission</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -100,12 +101,14 @@
 							<td style="text-align:left;">{{ payment.payment_by }}</td>
 							<td style="text-align:left;">{{ payment.CPayment_notes }}</td>
 							<td style="text-align:right;">{{ payment.CPayment_amount }}</td>
+							<td style="text-align:right;">{{ payment.CPayment_commission }}</td>
                         </tr>
                     </tbody>
                     <tfoot v-if="paymentType != ''">
                         <tr>
                             <td colspan="6" style="text-align:right;">Total</td>
                             <td style="text-align:right;">{{ payments.reduce((p, c) => { return p + parseFloat(c.CPayment_amount)}, 0).toFixed(2) }}</td>
+                            <td style="text-align:right;">{{ payments.reduce((p, c) => { return p + parseFloat(c.CPayment_commission)}, 0).toFixed(2) }}</td>
                         </tr>
                     </tfoot>
                 </table>

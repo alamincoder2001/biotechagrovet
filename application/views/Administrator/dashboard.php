@@ -136,7 +136,7 @@ if ($module == 'dashboard' or $module == '') { ?>
 				</div>
 
 
-				<div class="col-md-3 section4">
+				<!-- <div class="col-md-3 section4">
 					<div class="col-md-12 section122" style="background-color:#ffe3d7;" onmouseover="this.style.background = '#ffc0a6'" onmouseout="this.style.background = '#ffe3d7'">
 						<a href="<?php echo base_url(); ?>Login/logout">
 							<div class="logo">
@@ -147,7 +147,7 @@ if ($module == 'dashboard' or $module == '') { ?>
 							</div>
 						</a>
 					</div>
-				</div>
+				</div> -->
 			</div>
 			<!-- PAGE CONTENT ENDS -->
 		</div><!-- /.col -->

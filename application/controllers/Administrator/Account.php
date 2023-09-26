@@ -1149,7 +1149,7 @@ class Account extends CI_Controller {
                     cp.account_id,
                     cp.CPayment_date as transaction_date,
                     'deposit' as transaction_type,
-                    cp.CPayment_amount as deposit,
+                    cp.CPayment_amount + ifnull(cp.CPayment_commission, 0) as deposit,
                     0.00 as withdraw,
                     cp.CPayment_notes as note,
                     ac.account_name,
@@ -1174,7 +1174,7 @@ class Account extends CI_Controller {
                     cp.CPayment_date as transaction_date,
                     'withdraw' as transaction_type,
                     0.00 as deposit,
-                    cp.CPayment_amount as withdraw,
+                    cp.CPayment_amount + ifnull(cp.CPayment_commission, 0) as withdraw,
                     cp.CPayment_notes as note,
                     ac.account_name,
                     ac.account_number,
@@ -2128,7 +2128,7 @@ class Account extends CI_Controller {
                 cp.CPayment_id as id,
                 cp.CPayment_date as date,
                 concat('Due collection - ', cp.CPayment_invoice, ' - ', c.Customer_Name, ' (', c.Customer_Code, ')') as description,
-                cp.CPayment_amount as in_amount,
+                cp.CPayment_amount + ifnull(cp.CPayment_commission, 0) as in_amount,
                 0.00 as out_amount
             from tbl_customer_payment cp
             join tbl_customer c on c.Customer_SlNo = cp.CPayment_customerID
@@ -2305,7 +2305,7 @@ class Account extends CI_Controller {
                 cp.CPayment_date as date,
                 concat('Paid to customer - ', cp.CPayment_invoice, ' - ', c.Customer_Name, '(', c.Customer_Code, ')') as description,
                 0.00 as in_amount,
-                cp.CPayment_amount as out_amount
+                cp.CPayment_amount + ifnull(cp.CPayment_commission, 0) as out_amount
             from tbl_customer_payment cp
             join tbl_customer c on c.Customer_SlNo = cp.CPayment_customerID
             where cp.CPayment_TransactionType = 'CP'

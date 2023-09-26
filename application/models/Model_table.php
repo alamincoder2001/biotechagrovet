@@ -267,7 +267,7 @@ class Model_Table extends CI_Model
                 " . ($date == null ? "" : " and sm.SaleMaster_SaleDate < '$date'") . "
             ) as received_sales,
             (
-                select ifnull(sum(cp.CPayment_amount), 0) from tbl_customer_payment cp
+                select ifnull(sum(cp.CPayment_amount), 0) + ifnull(sum(cp.CPayment_commission), 0) from tbl_customer_payment cp
                 where cp.CPayment_TransactionType = 'CR'
                 and cp.CPayment_status = 'a'
                 and cp.CPayment_Paymentby != 'bank'
@@ -353,7 +353,7 @@ class Model_Table extends CI_Model
                 " . ($date == null ? "" : " and sp.SPayment_date < '$date'") . "
             ) as paid_supplier,
             (
-                select ifnull(sum(cp.CPayment_amount), 0) from tbl_customer_payment cp
+                select ifnull(sum(cp.CPayment_amount), 0) + ifnull(sum(cp.CPayment_commission), 0) from tbl_customer_payment cp
                 where cp.CPayment_TransactionType = 'CP'
                 and cp.CPayment_status = 'a'
                 and cp.CPayment_Paymentby != 'bank'
@@ -438,7 +438,7 @@ class Model_Table extends CI_Model
                     " . ($date == null ? "" : " and bt.transaction_date < '$date'") . "
                 ) as total_withdraw,
                 (
-                    select ifnull(sum(cp.CPayment_amount), 0) from tbl_customer_payment cp
+                    select ifnull(sum(cp.CPayment_amount), 0) + ifnull(sum(cp.CPayment_commission), 0) from tbl_customer_payment cp
                     where cp.account_id = ba.account_id
                     and cp.CPayment_status = 'a'
                     and cp.CPayment_TransactionType = 'CR'
@@ -446,7 +446,7 @@ class Model_Table extends CI_Model
                     " . ($date == null ? "" : " and cp.CPayment_date < '$date'") . "
                 ) as total_received_from_customer,
                 (
-                    select ifnull(sum(cp.CPayment_amount), 0) from tbl_customer_payment cp
+                    select ifnull(sum(cp.CPayment_amount), 0) + ifnull(sum(cp.CPayment_commission), 0) from tbl_customer_payment cp
                     where cp.account_id = ba.account_id
                     and cp.CPayment_status = 'a'
                     and cp.CPayment_TransactionType = 'CP'
@@ -656,14 +656,14 @@ class Model_Table extends CI_Model
                 " . ($date == null ? "" : " and sm.SaleMaster_SaleDate < '$date'") . "
                 and sm.Status = 'a') as invoicePaid,
 
-            (select ifnull(sum(cp.CPayment_amount), 0.00) 
+            (select ifnull(sum(cp.CPayment_amount), 0.00) + ifnull(sum(cp.CPayment_commission), 0.00)
                 from tbl_customer_payment cp 
                 where cp.CPayment_customerID = c.Customer_SlNo 
                 and cp.CPayment_TransactionType = 'CR'
                 " . ($date == null ? "" : " and cp.CPayment_date < '$date'") . "
                 and cp.CPayment_status = 'a') as cashReceived,
 
-            (select ifnull(sum(cp.CPayment_amount), 0.00) 
+            (select ifnull(sum(cp.CPayment_amount), 0.00) + ifnull(sum(cp.CPayment_commission), 0.00)
                 from tbl_customer_payment cp 
                 where cp.CPayment_customerID = c.Customer_SlNo 
                 and cp.CPayment_TransactionType = 'CP'

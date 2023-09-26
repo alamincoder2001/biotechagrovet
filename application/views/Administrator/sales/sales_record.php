@@ -68,6 +68,7 @@
 						<option value="category">By Category</option>
 						<option value="quantity">By Quantity</option>
 						<option value="user">By User</option>
+						<option value="unitAreas">By Area</option>
 					</select>
 				</div>
 
@@ -95,6 +96,17 @@
 					<label>User</label>
 					<v-select v-bind:options="users" v-model="selectedUser" label="FullName"></v-select>
 				</div>
+
+				<div class="form-group" style="display:none;" v-bind:style="{display: searchType == 'unitAreas' && unitAreas.length > 0 ? '' : 'none'}">
+					<label>Area</label>
+					<v-select v-bind:options="unitAreas" v-model="selectedUnitArea" label="unit_area_name" @input="getTerritory"></v-select>
+				</div>
+
+				<div class="form-group" style="display:none;" v-bind:style="{display: searchType == 'unitAreas' && territories.length > 0 ? '' : 'none'}">
+					<label>Territory</label>
+					<v-select v-bind:options="territories" v-model="selectedTerritory" label="territory_name"></v-select>
+				</div>
+
 
 				<div class="form-group" v-bind:style="{display: searchTypesForRecord.includes(searchType) ? '' : 'none'}">
 					<label>Record Type</label>
@@ -135,6 +147,8 @@
 						<tr>
 							<th>Invoice No.</th>
 							<th>Date</th>
+							<th>Area Name</th>
+							<th>Territory Name</th>
 							<th>Customer Name</th>
 							<th>Employee Name</th>
 							<th>Saved By</th>
@@ -150,6 +164,8 @@
 							<tr>
 								<td>{{ sale.SaleMaster_InvoiceNo }}</td>
 								<td>{{ sale.SaleMaster_SaleDate }}</td>
+								<td>{{ sale.unit_area_name }}</td>
+								<td>{{ sale.territory_name }}</td>
 								<td>{{ sale.Customer_Name }}</td>
 								<td>{{ sale.Employee_Name }}</td>
 								<td>{{ sale.AddBy }}</td>
@@ -167,7 +183,7 @@
 								</td>
 							</tr>
 							<tr v-for="(product, sl) in sale.saleDetails.slice(1)">
-								<td colspan="5" v-bind:rowspan="sale.saleDetails.length - 1" v-if="sl == 0"></td>
+								<td colspan="7" v-bind:rowspan="sale.saleDetails.length - 1" v-if="sl == 0"></td>
 								<td>{{ product.Product_Name }}</td>
 								<td style="text-align:right;">{{ product.SaleDetails_Rate }}</td>
 								<td style="text-align:center;">{{ product.SaleDetails_TotalQuantity }}</td>
@@ -175,7 +191,7 @@
 								<td></td>
 							</tr>
 							<tr style="font-weight:bold;">
-								<td colspan="7" style="font-weight:normal;"><strong>Note: </strong>{{ sale.SaleMaster_Description }}</td>
+								<td colspan="9" style="font-weight:normal;"><strong>Note: </strong>{{ sale.SaleMaster_Description }}</td>
 								<td style="text-align:center;">Total Quantity<br>{{ sale.saleDetails.reduce((prev, curr) => {return prev + parseFloat(curr.SaleDetails_TotalQuantity)}, 0) }}</td>
 								<td style="text-align:right;">
 									Total: {{ sale.SaleMaster_TotalSaleAmount }}<br>
@@ -198,6 +214,8 @@
 						<tr>
 							<th>Invoice No.</th>
 							<th>Date</th>
+							<th>Area Name</th>
+							<th>Territory Name</th>
 							<th>Customer Name</th>
 							<th>Employee Name</th>
 							<th>Saved By</th>
@@ -216,6 +234,8 @@
 						<tr v-for="sale in sales">
 							<td>{{ sale.SaleMaster_InvoiceNo }}</td>
 							<td>{{ sale.SaleMaster_SaleDate }}</td>
+							<td>{{ sale.unit_area_name }}</td>
+							<td>{{ sale.territory_name }}</td>
 							<td>{{ sale.Customer_Name }}</td>
 							<td>{{ sale.Employee_Name }}</td>
 							<td>{{ sale.AddBy }}</td>
@@ -239,7 +259,7 @@
 					</tbody>
 					<tfoot>
 						<tr style="font-weight:bold;">
-							<td colspan="5" style="text-align:right;">Total</td>
+							<td colspan="7" style="text-align:right;">Total</td>
 							<td style="text-align:right;">{{ sales.reduce((prev, curr)=>{return prev + parseFloat(curr.SaleMaster_SubTotalAmount)}, 0) }}</td>
 							<td style="text-align:right;">{{ sales.reduce((prev, curr)=>{return prev + parseFloat(curr.SaleMaster_TaxAmount)}, 0) }}</td>
 							<td style="text-align:right;">{{ sales.reduce((prev, curr)=>{return prev + parseFloat(curr.SaleMaster_TotalDiscountAmount)}, 0) }}</td>
@@ -263,6 +283,8 @@
 							<tr>
 								<th>Invoice No.</th>
 								<th>Date</th>
+								<th>Area Name</th>
+								<th>Territory Name</th>
 								<th>Customer Name</th>
 								<th>Product Name</th>
 								<th>Sales Rate</th>
@@ -273,6 +295,8 @@
 							<tr v-for="sale in sales">
 								<td>{{ sale.SaleMaster_InvoiceNo }}</td>
 								<td>{{ sale.SaleMaster_SaleDate }}</td>
+								<td>{{ sale.unit_area_name }}</td>
+								<td>{{ sale.territory_name }}</td>
 								<td>{{ sale.Customer_Name }}</td>
 								<td>{{ sale.Product_Name }}</td>
 								<td style="text-align:right;">{{ sale.SaleDetails_Rate }}</td>
@@ -341,11 +365,36 @@
 				categories: [],
 				selectedCategory: null,
 				sales: [],
-				searchTypesForRecord: ['', 'user', 'customer', 'employee'],
-				searchTypesForDetails: ['quantity', 'category']
+				searchTypesForRecord: ['', 'user', 'customer', 'employee', 'unitAreas'],
+				searchTypesForDetails: ['quantity', 'category'],
+				unitAreas: [],
+				selectedUnitArea: {
+					unit_area_id: '',
+					unit_area_name: 'Select---'
+				},
+				territories: [],
+				selectedTerritory: {
+					territory_id: '',
+					territory_name: 'Select---'
+				},
 			}
 		},
 		methods: {
+			getUnitAreas() {
+				axios.post('/get-unit-areas').then(res => {
+					this.unitAreas = res.data;
+				})
+			},
+			getTerritory() {
+				if (this.selectedUnitArea.unit_area_id != '') {
+					axios.post('/get-territories', {
+						unitAreaId: this.selectedUnitArea.unit_area_id
+					}).then(res => {
+						this.territories = res.data;
+					})
+
+				}
+			},
 			checkReturnAndEdit(sale){
 				axios.get('/check_sale_return/' + sale.SaleMaster_InvoiceNo).then(res=>{
 					if(res.data.found){
@@ -375,7 +424,12 @@
 				}
 				else if(this.searchType == 'employee'){
 					this.getEmployees();
-				}
+				} else if(this.searchType == 'unitAreas') {
+					this.getUnitAreas();
+				} else if(this.searchType == 'unitAreas' && this.selectedUnitArea.unit_area_id != '') {
+					this.getTerritory();
+				} 
+				
 			},
 			getProducts(){
 				axios.get('/get_products').then(res => {
@@ -419,6 +473,11 @@
 					this.selectedCategory = null;
 				}
 
+				if(this.searchType != 'unitAreas'){
+					this.selectedUnitArea = null;
+					this.selectedTerritory = null;
+				}
+
 				if(this.searchTypesForRecord.includes(this.searchType)){
 					this.getSalesRecord();
 				} else {
@@ -430,6 +489,8 @@
 					userFullName: this.selectedUser == null || this.selectedUser.FullName == '' ? '' : this.selectedUser.FullName,
 					customerId: this.selectedCustomer == null || this.selectedCustomer.Customer_SlNo == '' ? '' : this.selectedCustomer.Customer_SlNo,
 					employeeId: this.selectedEmployee == null || this.selectedEmployee.Employee_SlNo == '' ? '' : this.selectedEmployee.Employee_SlNo,
+					unitAreaId: this.selectedUnitArea == null || this.selectedUnitArea.unit_area_id == '' ? '' : this.selectedUnitArea.unit_area_id,
+					territoryId: this.selectedTerritory == null || this.selectedTerritory.territory_id == '' ? '' : this.selectedTerritory.territory_id,
 					dateFrom: this.dateFrom,
 					dateTo: this.dateTo
 				}
