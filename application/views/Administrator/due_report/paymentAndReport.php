@@ -75,7 +75,8 @@ $totalDue = $type == 'CR' ? $prevdueAmont - ($CPROW->CPayment_amount  + $CPROW->
         </div>
         <div class="row" style="margin-bottom: 20px;">
             <div class="col-xs-12">
-                <h6 style=" font-size: 12px; font-weight: 600;">Paid (In Word): <?php echo convertNumberToWord($CPROW->CPayment_amount);?></h6>
+                <!-- <h6 style=" font-size: 12px; font-weight: 600;">Paid (In Word): <?php echo convertNumberToWord($CPROW->CPayment_amount);?></h6> -->
+                <h6 style=" font-size: 12px; font-weight: 600;">Paid (In Word): <span class="convertNumber"></span></h6>
             </div>
         </div>
         <div class="row" style="margin-bottom: 20px;">
@@ -119,12 +120,12 @@ $totalDue = $type == 'CR' ? $prevdueAmont - ($CPROW->CPayment_amount  + $CPROW->
           'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'
       );
       $list2 = array('', 'ten', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety', 'hundred');
-      $list3 = array('', 'thousand', 'million', 'billion', 'trillion', 'quadrillion', 'quintillion', 'sextillion', 'septillion',
+      $list3 = array('', 'thousand', 'milion', 'billion', 'trillion', 'quadrillion', 'quintillion', 'sextillion', 'septillion',
           'octillion', 'nonillion', 'decillion', 'undecillion', 'duodecillion', 'tredecillion', 'quattuordecillion',
           'quindecillion', 'sexdecillion', 'septendecillion', 'octodecillion', 'novemdecillion', 'vigintillion'
       );
       $num_length = strlen($num);
-      $levels = (int) (($num_length + 2) / 3);
+      return $levels = (int) (($num_length + 2) / 3);
       $max_length = $levels * 3;
       $num = substr('00' . $num, -$max_length);
       $num_levels = str_split($num, 3);
@@ -180,4 +181,104 @@ $totalDue = $type == 'CR' ? $prevdueAmont - ($CPROW->CPayment_amount  + $CPROW->
         reportWindow.print();
         reportWindow.close();
     }
+
+    function convertNumberToWords(amountToWord) {
+      var words = new Array();
+      words[0] = "";
+      words[1] = "One";
+      words[2] = "Two";
+      words[3] = "Three";
+      words[4] = "Four";
+      words[5] = "Five";
+      words[6] = "Six";
+      words[7] = "Seven";
+      words[8] = "Eight";
+      words[9] = "Nine";
+      words[10] = "Ten";
+      words[11] = "Eleven";
+      words[12] = "Twelve";
+      words[13] = "Thirteen";
+      words[14] = "Fourteen";
+      words[15] = "Fifteen";
+      words[16] = "Sixteen";
+      words[17] = "Seventeen";
+      words[18] = "Eighteen";
+      words[19] = "Nineteen";
+      words[20] = "Twenty";
+      words[30] = "Thirty";
+      words[40] = "Forty";
+      words[50] = "Fifty";
+      words[60] = "Sixty";
+      words[70] = "Seventy";
+      words[80] = "Eighty";
+      words[90] = "Ninety";
+      amount = amountToWord == null ? "0.00" : amountToWord.toString();
+      var atemp = amount.split(".");
+      var number = atemp[0].split(",").join("");
+      var n_length = number.length;
+      var words_string = "";
+      if (n_length <= 9) {
+        var n_array = new Array(0, 0, 0, 0, 0, 0, 0, 0, 0);
+        var received_n_array = new Array();
+        for (var i = 0; i < n_length; i++) {
+          received_n_array[i] = number.substr(i, 1);
+        }
+        for (var i = 9 - n_length, j = 0; i < 9; i++, j++) {
+          n_array[i] = received_n_array[j];
+        }
+        for (var i = 0, j = 1; i < 9; i++, j++) {
+          if (i == 0 || i == 2 || i == 4 || i == 7) {
+            if (n_array[i] == 1) {
+              n_array[j] = 10 + parseInt(n_array[j]);
+              n_array[i] = 0;
+            }
+          }
+        }
+        value = "";
+        for (var i = 0; i < 9; i++) {
+          if (i == 0 || i == 2 || i == 4 || i == 7) {
+            value = n_array[i] * 10;
+          } else {
+            value = n_array[i];
+          }
+          if (value != 0) {
+            words_string += words[value] + " ";
+          }
+          if (
+            (i == 1 && value != 0) ||
+            (i == 0 && value != 0 && n_array[i + 1] == 0)
+          ) {
+            words_string += "Crores ";
+          }
+          if (
+            (i == 3 && value != 0) ||
+            (i == 2 && value != 0 && n_array[i + 1] == 0)
+          ) {
+            words_string += "Lakhs ";
+          }
+          if (
+            (i == 5 && value != 0) ||
+            (i == 4 && value != 0 && n_array[i + 1] == 0)
+          ) {
+            words_string += "Thousand ";
+          }
+          if (
+            i == 6 &&
+            value != 0 &&
+            n_array[i + 1] != 0 &&
+            n_array[i + 2] != 0
+          ) {
+            words_string += "Hundred and ";
+          } else if (i == 6 && value != 0) {
+            words_string += "Hundred ";
+          }
+        }
+        words_string = words_string.split("  ").join(" ");
+      }
+    //   return words_string + " only";
+
+      $('.convertNumber').text(words_string + " only");
+    }
+
+    convertNumberToWords("<?php echo $CPROW->CPayment_amount ;?>")
 </script>
